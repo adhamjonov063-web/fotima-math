@@ -18,7 +18,9 @@ import {
   PlayCircle,
   BrainCircuit,
   Award,
-  BookMarked
+  BookMarked,
+  Calculator,
+  Star
 } from 'lucide-react';
 import LessonView from './LessonView.tsx';
 import StatisticsView from './StatisticsView.tsx';

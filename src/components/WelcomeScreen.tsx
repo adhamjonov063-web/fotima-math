@@ -209,5 +209,3 @@ export default function WelcomeScreen({ onRegister }: WelcomeScreenProps) {
     </div>
   );
 }
-
-import { AnimatePresence } from 'motion/react';
