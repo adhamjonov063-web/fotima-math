@@ -22,10 +22,13 @@ export default function App() {
     setLoading(false);
   }, []);
 
-  const handleRegister = (name: string, age: number, level: UserLevel) => {
+  const handleRegister = (name: string, age: number, level: UserLevel, birthYear: number, birthMonth: string, school: string) => {
     const newUser: UserProfile = {
       name,
       age,
+      birthYear,
+      birthMonth,
+      school,
       level,
       xp: 0,
       completedLessons: [],

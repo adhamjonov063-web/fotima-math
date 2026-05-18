@@ -17,12 +17,14 @@ import {
   ChevronRight,
   PlayCircle,
   BrainCircuit,
-  Award
+  Award,
+  BookMarked
 } from 'lucide-react';
 import LessonView from './LessonView.tsx';
 import StatisticsView from './StatisticsView.tsx';
 import RankingBoard from './RankingBoard.tsx';
 import LogicPuzzles from './LogicPuzzles.tsx';
+import RulesView from './RulesView.tsx';
 import { motion, AnimatePresence } from 'motion/react';
 import { clearUser } from '../lib/utils.ts';
 
@@ -31,7 +33,7 @@ interface DashboardProps {
   onUpdateUser: (user: UserProfile) => void;
 }
 
-type Tab = 'overview' | 'courses' | 'logic' | 'stats' | 'rankings';
+type Tab = 'overview' | 'rules' | 'courses' | 'logic' | 'stats' | 'rankings';
 
 export default function Dashboard({ user, onUpdateUser }: DashboardProps) {
   const [activeTab, setActiveTab] = useState<Tab>('overview');
@@ -55,7 +57,8 @@ export default function Dashboard({ user, onUpdateUser }: DashboardProps) {
 
   const menuItems = [
     { id: 'overview', label: 'Bosh sahifa', icon: <LayoutDashboard size={20} /> },
-    { id: 'courses', label: 'Mening kurslarim', icon: <BookOpen size={20} /> },
+    { id: 'rules', label: 'Qoidalar', icon: <BookMarked size={20} /> },
+    { id: 'courses', label: 'Darslar', icon: <BookOpen size={20} /> },
     { id: 'logic', label: 'Mantiqiy masalalar', icon: <BrainCircuit size={20} /> },
     { id: 'stats', label: 'Statistika', icon: <BarChart3 size={20} /> },
     { id: 'rankings', label: 'Reyting', icon: <TrophyIcon size={20} /> },
@@ -285,6 +288,8 @@ export default function Dashboard({ user, onUpdateUser }: DashboardProps) {
                   </div>
                 </div>
               </motion.div>
+            ) : activeTab === 'rules' ? (
+               <RulesView level={viewingLevel} />
             ) : activeTab === 'courses' ? (
               <motion.div
                 key="courses"
@@ -293,6 +298,29 @@ export default function Dashboard({ user, onUpdateUser }: DashboardProps) {
                 exit={{ opacity: 0 }}
                 className="space-y-6"
               >
+                 <div className="flex items-center justify-between mb-8">
+                   <h2 className="text-3xl font-black text-slate-900 tracking-tight">Darslar ro'yxati</h2>
+                   <div className="flex gap-2">
+                     <button 
+                       onClick={() => setViewingLevel(UserLevel.SENIOR)}
+                       className={cn("px-4 py-2 rounded-xl text-xs font-black uppercase tracking-widest", viewingLevel === UserLevel.SENIOR ? "bg-emerald-600 text-white" : "bg-white text-slate-400")}
+                     >
+                       Senior (Oson)
+                     </button>
+                     <button 
+                       onClick={() => setViewingLevel(UserLevel.JUNIOR)}
+                       className={cn("px-4 py-2 rounded-xl text-xs font-black uppercase tracking-widest", viewingLevel === UserLevel.JUNIOR ? "bg-amber-500 text-white" : "bg-white text-slate-400")}
+                     >
+                       Junior (O'rta)
+                     </button>
+                     <button 
+                       onClick={() => setViewingLevel(UserLevel.MASTER)}
+                       className={cn("px-4 py-2 rounded-xl text-xs font-black uppercase tracking-widest", viewingLevel === UserLevel.MASTER ? "bg-rose-500 text-white" : "bg-white text-slate-400")}
+                     >
+                       Master (Qiyin)
+                     </button>
+                   </div>
+                 </div>
                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {filteredLessons.map((lesson) => (
                       <button
@@ -325,7 +353,7 @@ export default function Dashboard({ user, onUpdateUser }: DashboardProps) {
                   </div>
               </motion.div>
             ) : activeTab === 'logic' ? (
-               <LogicPuzzles user={user} onUpdateUser={onUpdateUser} />
+               <LogicPuzzles user={user} onUpdateUser={onUpdateUser} currentLevel={viewingLevel} />
             ) : activeTab === 'stats' ? (
               <StatisticsView user={user} filteredLessons={filteredLessons} />
             ) : (

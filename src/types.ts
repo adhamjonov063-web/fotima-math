@@ -12,11 +12,21 @@ export enum UserLevel {
 export interface UserProfile {
   name: string;
   age?: number;
+  birthYear?: number;
+  birthMonth?: string;
+  school?: string;
   level: UserLevel;
   xp: number;
   completedLessons: string[];
   testScores: Record<string, number>; // levelId -> score
   createdAt: number;
+}
+
+export interface Rule {
+  id: string;
+  title: string;
+  content: string;
+  level: UserLevel;
 }
 
 export interface QuizQuestion {

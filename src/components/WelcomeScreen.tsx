@@ -10,49 +10,54 @@ import { Calculator, Star, Trophy, GraduationCap, ArrowRight } from 'lucide-reac
 import { cn } from '../lib/utils.ts';
 
 interface WelcomeScreenProps {
-  onRegister: (name: string, age: number, level: UserLevel) => void;
+  onRegister: (name: string, age: number, level: UserLevel, birthYear: number, birthMonth: string, school: string) => void;
 }
 
 export default function WelcomeScreen({ onRegister }: WelcomeScreenProps) {
   const [name, setName] = useState('');
   const [age, setAge] = useState('');
+  const [birthYear, setBirthYear] = useState('');
+  const [birthMonth, setBirthMonth] = useState('Yanvar');
+  const [school, setSchool] = useState('');
   const [level, setLevel] = useState<UserLevel>(UserLevel.JUNIOR);
   const [step, setStep] = useState(1);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (name.trim() && age) {
+    if (name.trim() && age && birthYear && school.trim()) {
       if (step === 1) {
         setStep(2);
       } else {
-        onRegister(name, parseInt(age), level);
+        onRegister(name, parseInt(age), level, parseInt(birthYear), birthMonth, school);
       }
     }
   };
 
   const levels = [
     {
-      id: UserLevel.JUNIOR,
-      title: 'Junior',
-      desc: 'Matematikani o\'rganishni endi boshlayotganlar uchun. Oddiy va tushunarli.',
-      icon: <Calculator className="w-6 h-6 text-emerald-600" />,
+      id: UserLevel.SENIOR,
+      title: 'Senior',
+      desc: 'Juda oson - Matematikani endi boshlayotganlar uchun eng oson daraja.',
+      icon: <Star className="w-6 h-6 text-emerald-600" />,
       color: 'border-emerald-200 bg-emerald-50 text-emerald-700',
     },
     {
-      id: UserLevel.SENIOR,
-      title: 'Senior',
-      desc: 'O\'rtacha darajadagi bilimga ega bo\'lganlar uchun. Mantiqiy va qiziqarli.',
-      icon: <Star className="w-6 h-6 text-amber-600" />,
+      id: UserLevel.JUNIOR,
+      title: 'Junior',
+      desc: 'O\'rtacha - Oddiy va tushunarli darajadagi bilimga ega bo\'lganlar uchun.',
+      icon: <Calculator className="w-6 h-6 text-amber-600" />,
       color: 'border-amber-200 bg-amber-50 text-amber-700',
     },
     {
       id: UserLevel.MASTER,
       title: 'Master',
-      desc: 'Matematika bilimdonlari uchun. Murakkab va muammoli masalalar.',
+      desc: 'Juda qiyin - Matematika bilimdonlari uchun murakkab va muammoli masalalar.',
       icon: <Trophy className="w-6 h-6 text-rose-600" />,
       color: 'border-rose-200 bg-rose-50 text-rose-700',
     },
   ];
+
+  const months = ['Yanvar', 'Fevral', 'Mart', 'Aprel', 'May', 'Iyun', 'Iyul', 'Avgust', 'Sentabr', 'Oktabr', 'Noyabr', 'Dekabr'];
 
   return (
     <div className="flex items-center justify-center min-h-screen p-4 bg-indigo-600">
@@ -92,23 +97,59 @@ export default function WelcomeScreen({ onRegister }: WelcomeScreenProps) {
                       className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all"
                     />
                   </div>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium text-slate-700 ml-1">Yoshingiz</label>
+                      <input
+                        type="number"
+                        required
+                        min="5"
+                        max="100"
+                        value={age}
+                        onChange={(e) => setAge(e.target.value)}
+                        placeholder="18"
+                        className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium text-slate-700 ml-1">Tug'ilgan yilingiz</label>
+                      <input
+                        type="number"
+                        required
+                        min="1920"
+                        max="2026"
+                        value={birthYear}
+                        onChange={(e) => setBirthYear(e.target.value)}
+                        placeholder="2006"
+                        className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all"
+                      />
+                    </div>
+                  </div>
                   <div className="space-y-2">
-                    <label className="text-sm font-medium text-slate-700 ml-1">Yoshingizni kiriting</label>
+                    <label className="text-sm font-medium text-slate-700 ml-1">Tug'ilgan oyingiz</label>
+                    <select
+                      value={birthMonth}
+                      onChange={(e) => setBirthMonth(e.target.value)}
+                      className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all appearance-none bg-white"
+                    >
+                      {months.map(m => <option key={m} value={m}>{m}</option>)}
+                    </select>
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium text-slate-700 ml-1">Qaysi maktabda o'qiysiz?</label>
                     <input
-                      type="number"
+                      type="text"
                       required
-                      min="5"
-                      max="100"
-                      value={age}
-                      onChange={(e) => setAge(e.target.value)}
-                      placeholder="Masalan: 18"
+                      value={school}
+                      onChange={(e) => setSchool(e.target.value)}
+                      placeholder="Masalan: 1-IDUM"
                       className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all"
                     />
                   </div>
                 </div>
                 <button
                   type="submit"
-                  disabled={!name.trim() || !age}
+                  disabled={!name.trim() || !age || !birthYear || !school.trim()}
                   className="w-full py-3 bg-indigo-600 hover:bg-indigo-700 disabled:bg-slate-300 text-white font-semibold rounded-xl transition-colors flex items-center justify-center gap-2 group"
                 >
                   Davom etish
